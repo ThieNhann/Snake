@@ -93,3 +93,7 @@ Họp ngày 28-04-2025: [bien_ban_hop_28_04](https://studenthcmusedu-my.sharepoi
 ## Tài liệu mô tả kiến trúc phần mềm và các module:
 [Kien_Truc_Phan_Mem](https://studenthcmusedu-my.sharepoint.com/:t:/g/personal/23120064_student_hcmus_edu_vn/EfWT-Dt0K7dAkRIenLFUwZABEELvhgX0nWebudY-ucgRmg?e=9dwham)
 
+## Demo:
+[Demo](https://youtu.be/OtVR6b829zA)
+
+
