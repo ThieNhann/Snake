@@ -60,7 +60,7 @@ void Game::update(float dt) {
         timer = 0;
         snake.move();
 
-        if (snake.checkSelfCollision()) {
+        if (snake.checkSelfCollision() || snake.checkWallCollision()) {
             if (score > highScore) {
                 highScore = score;
             }

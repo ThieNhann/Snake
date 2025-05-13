@@ -22,6 +22,7 @@ public:
     void move();
     void grow();
     bool checkSelfCollision() const;
+    bool checkWallCollision(bool wallCollisionMode) const;
     bool isAt(int x, int y) const;
     void setDirection(int dir);
     int getDirection() const;

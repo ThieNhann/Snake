@@ -57,6 +57,14 @@ bool Snake::checkSelfCollision() const {
     return false;
 }
 
+bool Snake::checkWallCollision(bool wallCollisionMode) const {
+    if (!wallCollisionMode) return false;
+    if (body[0].x == 0 || body[0].x == gridW || body[0].y == 0 || body[0].y == gridH) {
+        return true;
+    }
+    return false;
+}
+
 bool Snake::isAt(int x, int y) const {
     for (const auto& seg : body) {
         if (seg.x == x && seg.y == y) return true;
