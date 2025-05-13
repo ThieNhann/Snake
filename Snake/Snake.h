@@ -19,7 +19,7 @@ public:
     Snake(int gridWidth, int gridHeight);
 
     void reset();
-    void move();
+    void move(bool wallCollisionMode);
     void grow();
     bool checkSelfCollision() const;
     bool checkWallCollision(bool wallCollisionMode) const;

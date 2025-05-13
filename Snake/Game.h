@@ -9,7 +9,7 @@
 #include "Settings.h"
 
 enum GameState { MENU, MENU_WITH_SAVED, PLAYING, PAUSED, GAME_OVER, CONFIRMATION, 
-                 SETTINGS_MENU, SETTINGS_RESOLUTION, SETTINGS_SOUND };
+                 SETTINGS_MENU, SETTINGS_RESOLUTION, SETTINGS_SOUND, MODE_SELECTION};
 enum ConfirmationType { CONFIRM_EXIT, CONFIRM_NEW_GAME };
 
 class Game {
@@ -21,7 +21,7 @@ public:
     void handleInput(sf::RenderWindow& window);
     GameState getState() const;
     void setState(GameState newState);
-
+    bool wallCollisionMode();
     void saveSessionToFile();
     void loadSessionFromFile();
 
@@ -60,6 +60,9 @@ private:
     int savedScore = 0;
     float savedDelay = 0;
     int savedDirection = 0;
+
+    //Gamemode
+    bool withWallCollision = false;
 
     void loadAssets();
 

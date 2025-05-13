@@ -21,6 +21,7 @@ Game::Game(sf::Vector2u windowSize)
     loadSessionFromFile();
     ui = new UI(font, windowSize.x, windowSize.y);  // use actual window size
     state = MENU;
+    withWallCollision = false;
 }
 
 void Game::loadAssets() {
@@ -58,9 +59,9 @@ void Game::update(float dt) {
     timer += dt;
     if (timer > delay) {
         timer = 0;
-        snake.move();
+        snake.move(withWallCollision);
 
-        if (snake.checkSelfCollision() || snake.checkWallCollision()) {
+        if (snake.checkSelfCollision() || snake.checkWallCollision(withWallCollision)) {
             if (score > highScore) {
                 highScore = score;
             }
@@ -200,6 +201,19 @@ void Game::render(sf::RenderWindow& window) {
         ui->drawResolutionMenu(window);  // ✅ Correct method for submenu
         break;
     }
+    case MODE_SELECTION:
+    {
+        bgSprite.setTexture(bgMenu);
+        bgSprite.setColor(sf::Color(255, 255, 255, 150));
+        winSize = window.getSize();
+        bgSprite.setScale(
+            float(winSize.x) / bgMenu.getSize().x,
+            float(winSize.y) / bgMenu.getSize().y
+        );
+        window.draw(bgSprite);
+        ui->drawModeSelectionMenu(window);
+        break;
+    }
     case SETTINGS_SOUND:
     {
         bgSprite.setTexture(bgMenu);
@@ -241,6 +255,7 @@ void Game::handleInput(sf::RenderWindow& window) {
                     snake.setGridSize(gridSize.x, gridSize.y);
                     objects.setGridSize(gridSize.x, gridSize.y);
                     reset();
+                    state = MODE_SELECTION;
                 }
             }
             else if (isMouseOver(ui->continueButton.shape, mousePos) && hasSavedSession) {
@@ -286,7 +301,7 @@ void Game::handleInput(sf::RenderWindow& window) {
             if (isMouseOver(ui->yesButton.shape, mousePos)) {
                 if (confirmationType == CONFIRM_NEW_GAME) {
                     hasSavedSession = false;
-                    reset();
+                    state = MODE_SELECTION;
                 }
                 else if (confirmationType == CONFIRM_EXIT) {
                     window.close();
@@ -336,6 +351,15 @@ void Game::handleInput(sf::RenderWindow& window) {
                 state = SETTINGS_MENU;
             }
         }
+        else if (state == MODE_SELECTION) {
+            if (isMouseOver(ui->withWallCollisionButton.shape, mousePos)) {
+                withWallCollision = true;
+            }
+            else {
+                withWallCollision = false;
+            }
+            reset();
+        }
 
         buttonTimer.restart();
     }
@@ -347,6 +371,10 @@ GameState Game::getState() const {
 
 void Game::setState(GameState newState) {
     state = newState;
+}
+
+bool Game::wallCollisionMode() {
+    return withWallCollision;
 }
 
 void Game::saveSession() {

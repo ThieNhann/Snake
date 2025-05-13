@@ -45,6 +45,17 @@ void UI::resize(float w, float h) {
     settingsTitle.setOrigin(titleBounds.left + titleBounds.width / 2, titleBounds.top + titleBounds.height / 2);
     settingsTitle.setPosition(width / 2.f, titleY);
 
+    // --- Mode Select Titles ---
+    float modeTitleY = 50.f;
+    modeSelectTitle.setFont(font);
+    modeSelectTitle.setCharacterSize(16);
+    modeSelectTitle.setStyle(sf::Text::Bold);
+    modeSelectTitle.setFillColor(sf::Color::Black);
+    modeSelectTitle.setString("Game Mode");
+    sf::FloatRect modeTitleBounds = modeSelectTitle.getLocalBounds();
+    modeSelectTitle.setOrigin(modeTitleBounds.left + modeTitleBounds.width / 2, modeTitleBounds.top + modeTitleBounds.height / 2);
+    modeSelectTitle.setPosition(width / 2.f, modeTitleY);
+
     // --- Settings Root Buttons ---
     float settingsMenuStartY = height / 2.f - (buttonHeight + buttonSpacing);
     centerButton(resolutionButton, "Resolution", settingsMenuStartY, sf::Color(120, 120, 180));
@@ -59,6 +70,11 @@ void UI::resize(float w, float h) {
     centerButton(res800Button, "800 x 600", resStartY, sf::Color(100, 100, 200), 14);
     centerButton(res1600Button, "1600 x 900", resStartY + (buttonHeight + buttonSpacing), sf::Color(100, 100, 200), 14);
     centerButton(fullscreenButton, "Fullscreen", resStartY + 2 * (buttonHeight + buttonSpacing), sf::Color(100, 100, 200), 14);
+
+    // --- Mode Selection ---
+    float modeStartY = height / 2.f - 80.f;
+    centerButton(onlySelfCollisionButton, "Borderless", modeStartY, sf::Color(100, 100, 200), 14);
+    centerButton(withWallCollisionButton, "Bounded", modeStartY + (buttonHeight + buttonSpacing), sf::Color(100, 100, 200), 14);
 
     // --- Pause Circle + Bars ---
     float radius = 20.f;
@@ -243,6 +259,16 @@ void UI::drawResolutionMenu(sf::RenderWindow& window) {
     window.draw(backButton.shape); window.draw(backButton.label);
 }
 
+void UI::drawModeSelectionMenu(sf::RenderWindow& window) {
+    sf::FloatRect titleBounds = modeSelectTitle.getLocalBounds();
+    modeSelectTitle.setOrigin(titleBounds.left + titleBounds.width / 2.f, titleBounds.top + titleBounds.height / 2.f);
+    modeSelectTitle.setPosition(width / 2.f, 50.f);
+    modeSelectTitle.setString("Game Mode");
+    window.draw(modeSelectTitle);
+    window.draw(onlySelfCollisionButton.shape); window.draw(onlySelfCollisionButton.label);
+    window.draw(withWallCollisionButton.shape); window.draw(withWallCollisionButton.label);
+}
+
 void UI::drawSoundSettings(sf::RenderWindow& window) {
     sf::FloatRect titleBounds = settingsTitle.getLocalBounds();
     settingsTitle.setOrigin(titleBounds.left + titleBounds.width / 2.f, titleBounds.top + titleBounds.height / 2.f);
@@ -258,7 +284,7 @@ void UI::updateHoverEffect(const sf::Vector2f& mousePos) {
     &startButton, &resumeButton, &menuButton, &restartButton,
     &exitButton, &continueButton, &yesButton, &noButton,
     &settingsButton, &res800Button, &res1600Button, &fullscreenButton, &backButton,
-    &resolutionButton, &soundButton
+    &resolutionButton, &soundButton, &onlySelfCollisionButton, &withWallCollisionButton
     };
 
     for (auto btn : buttons) {
@@ -295,6 +321,8 @@ void UI::updateHoverEffect(const sf::Vector2f& mousePos) {
             else if (btn == &res800Button || btn == &res1600Button || btn == &fullscreenButton)
                 btn->shape.setFillColor(sf::Color(255, 255, 255, 200));  // normal semi-transparent
             else if (btn == &resolutionButton || btn == &soundButton)
+                btn->shape.setFillColor(sf::Color(255, 255, 255, 200));  // normal semi-transparent
+            else if (btn == &onlySelfCollisionButton || btn == &withWallCollisionButton)
                 btn->shape.setFillColor(sf::Color(255, 255, 255, 200));  // normal semi-transparent
         }
         if (pauseCircle.getGlobalBounds().contains(mousePos)) {

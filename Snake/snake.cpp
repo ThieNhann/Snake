@@ -21,7 +21,7 @@ void Snake::reset() {
     prevDirection = 0;
 }
 
-void Snake::move() {
+void Snake::move(bool wallCollisionMode) {
     // Shift body segments
     for (int i = body.size() - 1; i > 0; --i) {
         body[i] = body[i - 1];
@@ -35,12 +35,15 @@ void Snake::move() {
     case 3: body[0].y -= 1; break;
     }
 
-    // Wrap around edges of play area
-    if (body[0].x < 0) body[0].x = gridW - 1;
-    if (body[0].x >= gridW) body[0].x = 0;
-    if (body[0].y < 0) body[0].y = gridH - 1;
-    if (body[0].y >= gridH) body[0].y = 0;
+    // Wrap around edges of play area (if wall collision mode is off)
+    if (!wallCollisionMode) {
+        if (body[0].x < 0) body[0].x = gridW - 1;
+        if (body[0].x >= gridW) body[0].x = 0;
+        if (body[0].y < 0) body[0].y = gridH - 1;
+        if (body[0].y >= gridH) body[0].y = 0;
+    }
 
+    
     prevDirection = direction;
 }
 
@@ -59,7 +62,7 @@ bool Snake::checkSelfCollision() const {
 
 bool Snake::checkWallCollision(bool wallCollisionMode) const {
     if (!wallCollisionMode) return false;
-    if (body[0].x == 0 || body[0].x == gridW || body[0].y == 0 || body[0].y == gridH) {
+    if (body[0].x < 0 || body[0].x >= gridW || body[0].y < 0 || body[0].y >= gridH) {
         return true;
     }
     return false;

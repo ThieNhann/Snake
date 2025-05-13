@@ -23,6 +23,7 @@ public:
     void drawSettingsRoot(sf::RenderWindow& window);     // for "Resolution", "Sound", "Back"
     void drawResolutionMenu(sf::RenderWindow& window);
     void drawSoundSettings(sf::RenderWindow& window);
+    void drawModeSelectionMenu(sf::RenderWindow& window);
     void updateHoverEffect(const sf::Vector2f& mousePos);
 
     UIButton startButton;
@@ -50,12 +51,15 @@ public:
     UIButton resolutionButton;
     UIButton soundButton;
 
+    UIButton onlySelfCollisionButton;
+    UIButton withWallCollisionButton;
+
 private:
     sf::Font& font;
     float width, height;
     sf::Text gameOverText;
     sf::Text settingsTitle;
-
+    sf::Text modeSelectTitle;
     sf::Texture buttonTexture;
 
     void centerButton(UIButton& button, const std::string& text, float topY, sf::Color color, unsigned size = 15);
