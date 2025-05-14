@@ -60,7 +60,7 @@ void UI::layoutVolumeControls(float sliderWidth) {
     volumeLabel.setCharacterSize(14);
     volumeLabel.setFillColor(sf::Color::Black);
     volumeLabel.setString("Volume: 100%");
-    volumeLabel.setPosition(width / 2.f - 50.f, volumeTrack.getPosition().y + 30.f);
+    volumeLabel.setPosition(width / 2.f - 55.f, volumeTrack.getPosition().y + 30.f);
 }
 
 void UI::layoutPauseIcon() {
@@ -382,5 +382,5 @@ void UI::syncVolumeSlider(int volume) {
     volumeLabel.setString(std::to_string(volume) + "%");
     sf::FloatRect bounds = volumeLabel.getLocalBounds();
     volumeLabel.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-    volumeLabel.setPosition(knobX, volumeTrack.getPosition().y + 30.f);  // Adjust Y as needed
+    volumeLabel.setPosition(width / 2.f - 55.f, volumeTrack.getPosition().y + 30.f);  // Adjust Y as needed
 }
