@@ -22,26 +22,38 @@ void Snake::reset() {
 }
 
 void Snake::move() {
-    // Shift body segments
+    // --- Moving ---
     for (int i = body.size() - 1; i > 0; --i) {
         body[i] = body[i - 1];
     }
 
-    // Apply movement
+    // --- Direction ---
     switch (direction) {
-    case 0: body[0].y += 1; break;
-    case 1: body[0].x -= 1; break;
-    case 2: body[0].x += 1; break;
-    case 3: body[0].y -= 1; break;
+    case 0: body[0].y += 1; break;  // Down
+    case 1: body[0].x -= 1; break;  // Left
+    case 2: body[0].x += 1; break;  // Right
+    case 3: body[0].y -= 1; break;  // Up
     }
 
-    // Wrap around edges of play area
-    if (body[0].x < 0) body[0].x = gridW - 1;
-    if (body[0].x >= gridW) body[0].x = 0;
-    if (body[0].y < 0) body[0].y = gridH - 1;
-    if (body[0].y >= gridH) body[0].y = 0;
+    // --- Wrap around ---
+    if (wrappingEnabled) {
+        if (body[0].x < 0) body[0].x = gridW - 1;
+        if (body[0].x >= gridW) body[0].x = 0;
+        if (body[0].y < 0) body[0].y = gridH - 1;
+        if (body[0].y >= gridH) body[0].y = 0;
+    }
 
     prevDirection = direction;
+}
+
+void Snake::setWrappingEnabled(bool enabled) {
+    wrappingEnabled = enabled;
+}
+
+bool Snake::isWithinBounds() const {
+    int x = body[0].x;
+    int y = body[0].y;
+    return x >= 0 && y >= 0 && x < gridW && y < gridH;
 }
 
 void Snake::grow() {

@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>  // Needed for sf::VideoMode, sf::Uint32
 #include <fstream> 
 
+#include "Config.h"
+
 enum ResolutionOption {
     RES_800x600,
     RES_1600x900,
@@ -12,13 +14,15 @@ enum ResolutionOption {
 
 class GameSettings {
 public:
+    // default size
     ResolutionOption resolution = RES_800x600;
+    // default volume
+    int volume = 100;  
 
     void save(std::ofstream& out);
     void load(std::ifstream& in);
-
-    void loadFromFile();  // Add this to GameSettings
     void saveToFile();
+    void loadFromFile();
 
     // ✅ Declare these properly here
     sf::VideoMode getVideoMode() const;
