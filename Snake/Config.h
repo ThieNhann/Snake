@@ -2,6 +2,7 @@
 #define CONFIG_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 // --------------------------------------------------
 // Constants for tile/grid and timing logic
@@ -42,5 +43,32 @@ inline sf::Vector2i getPlayAreaSize(sf::Vector2u windowSize) {
 inline sf::Vector2i getPlayAreaOffset() {
     return sf::Vector2i(PLAY_AREA_MARGIN / TILE_SIZE, (PLAY_AREA_MARGIN + TOP_BAR_HEIGHT) / TILE_SIZE);
 }
+
+// -----------------------------
+// Resource file paths
+// -----------------------------
+const std::string FONT_PATH = "Resources/fonts/PressStart2P.ttf";
+
+const std::string TEXTURE_SNAKE = "Resources/images/snake.png";
+const std::string TEXTURE_FRUIT = "Resources/images/fruit.png";
+const std::string TEXTURE_BUTTON = "Resources/images/button.png";
+const std::string TEXTURE_BOMB = "Resources/images/bomb.png";
+const std::string TEXTURE_SUPER_FRUIT = "Resources/images/super_fruit.png";
+
+const std::string TEXTURE_BG_MENU = "Resources/images/bg_menu.png";
+const std::string TEXTURE_BG_GAMEOVER = "Resources/images/bg_gameover.png";
+
+const std::string SOUND_EAT = "Resources/audio/eat.wav";
+const std::string SOUND_BUTTON = "Resources/audio/button.wav";
+const std::string SOUND_GAMEOVER = "Resources/audio/game_over.wav";
+const std::string SOUND_EXPLODE = "Resources/audio/explode.wav";
+const std::string SOUND_SUPER_EAT = "Resources/audio/bonus.wav";
+
+// -----------------------------
+// Save file paths
+// -----------------------------
+const std::string SAVE_FILE_PATH = "Save files/save.dat";
+const std::string SETTINGS_FILE_PATH = "Save files/saved_setting.dat";
+
 
 #endif // CONFIG_H

@@ -28,12 +28,15 @@ public:
     const std::vector<SnakeSegment>& getBody() const;
     void load(const std::vector<SnakeSegment>& segments);
     void load(const std::vector<SnakeSegment>& segments, int restoredDirection = 0);
+    void setWrappingEnabled(bool enabled);
+    bool isWithinBounds() const;
     void setGridSize(int gridWidth, int gridHeight);
 
 private:
     std::vector<SnakeSegment> body;
     int direction = 0;      // 0=Down, 1=Left, 2=Right, 3=Up
     int prevDirection = 0;
+    bool wrappingEnabled = true;
     int gridW, gridH;
 };
 
