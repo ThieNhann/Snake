@@ -12,7 +12,7 @@
 #include <fstream>
 #include <sstream>
 
-sf::Clock buttonTimer;  // global button cooldown timer
+sf::Clock buttonTimer;  
 
 Game::Game(sf::Vector2u windowSize)
     : gridSize(getPlayAreaSize(windowSize)),
@@ -27,7 +27,7 @@ Game::Game(sf::Vector2u windowSize)
     }
     loadSessionFromFile();
 
-    ui = new UI(font, windowSize.x, windowSize.y);  // use actual window size
+    ui = new UI(font, windowSize.x, windowSize.y);  
 
     soundButton.setVolume(setting.volume);
     soundGameOver.setVolume(setting.volume);
@@ -116,7 +116,7 @@ void Game::update(float dt) {
     objects.updateSuperFruit(dt, score, snake);
     // Update bomb visibility after score change
     if (skipNextBombUpdate) {
-        skipNextBombUpdate = false;  // Skip only once
+        skipNextBombUpdate = false;  
     }
     else {
         objects.updateBomb(score, snake);
@@ -128,7 +128,7 @@ void Game::update(float dt) {
             isDying = false;
             state = GAME_OVER;
         }
-        return; // Pause all game logic while dying
+        return; 
     }
 
     timer += dt;
@@ -154,7 +154,7 @@ void Game::update(float dt) {
             saveHighScoreAndSettingsOnly();
 
             isDying = true;
-            dyingTimer = 2.f; // 3-second pause
+            dyingTimer = 2.f; 
             return;
         }
 
@@ -191,7 +191,7 @@ void Game::render(sf::RenderWindow& window) {
     // --- Set background based on game state ---
     if (state == MENU) {
         bgSprite.setTexture(bgMenu);
-        bgSprite.setColor(sf::Color::White);  // Reset to fully opaque
+        bgSprite.setColor(sf::Color::White);  
         sf::Vector2u winSize = window.getSize();
         bgSprite.setScale(
             float(winSize.x) / bgMenu.getSize().x,
@@ -210,7 +210,7 @@ void Game::render(sf::RenderWindow& window) {
     }
 
     else if (state == PLAYING) {
-        window.clear(RetroGreen); // Retro green background
+        window.clear(RetroGreen); 
 
         sf::Vector2u winSize = window.getSize(); 
         int left = PLAY_AREA_MARGIN; 
@@ -219,8 +219,8 @@ void Game::render(sf::RenderWindow& window) {
         int height = winSize.y - 2 * PLAY_AREA_MARGIN - TOP_BAR_HEIGHT; 
 
         sf::RectangleShape border;
-        border.setSize({ float(width) - 10, float(height) - 3});  // Temporary adjust by adding magic value
-        border.setPosition(left + 8.5f, top + 5.0f);              // for offseting, need improve later
+        border.setSize({ float(width) - 10, float(height) - 3});  
+        border.setPosition(left + 8.5f, top + 5.0f);              
         border.setOutlineThickness(5.f);
         border.setOrigin(2.5f, 2.5f);
         border.setOutlineColor(mode == FIRE_BORDER_MODE ? sf::Color::Red : sf::Color::Black);
@@ -234,7 +234,7 @@ void Game::render(sf::RenderWindow& window) {
     }
     else if (state == MENU_WITH_SAVED) {
         bgSprite.setTexture(bgMenu);
-        bgSprite.setColor(sf::Color::White);  // Reset to fully opaque
+        bgSprite.setColor(sf::Color::White);  
         sf::Vector2u winSize = window.getSize();
         bgSprite.setScale(
             float(winSize.x) / bgMenu.getSize().x,
@@ -248,7 +248,7 @@ void Game::render(sf::RenderWindow& window) {
     switch (state) {
     case MENU:
     case MENU_WITH_SAVED:
-        ui->drawMenu(window, hasSavedSession);  // Pass in actual status
+        ui->drawMenu(window, hasSavedSession);  
         break;
     case MODE_SELECTION:
         ui->drawModeSelection(window);
@@ -264,7 +264,7 @@ void Game::render(sf::RenderWindow& window) {
         // Top HUD (score, pause button, etc.)
         ui->drawHUD(window, score, highScore);
 
-        sf::Vector2i offset = getPlayAreaOffset(); // in grid units
+        sf::Vector2i offset = getPlayAreaOffset(); 
         sf::Vector2f pixelOffset(
             PLAY_AREA_MARGIN + 7,
             PLAY_AREA_MARGIN + TOP_BAR_HEIGHT + 3
@@ -283,10 +283,10 @@ void Game::render(sf::RenderWindow& window) {
                 if (flicker < 0.2f)
                     snakeSprite.setColor(sf::Color::White);
                 else
-                    snakeSprite.setColor(sf::Color::Red);  // Optional: original color or red
+                    snakeSprite.setColor(sf::Color::Red);  
             }
             else {
-                snakeSprite.setColor(sf::Color::White); // Normal state
+                snakeSprite.setColor(sf::Color::White); 
             }
 
             window.draw(snakeSprite);
@@ -305,7 +305,7 @@ void Game::render(sf::RenderWindow& window) {
             if (flicker < 0.5f)
                 bombSprite.setColor(sf::Color::White);
             else
-                bombSprite.setColor(sf::Color::Black); // or sf::Color::Transparent for blinking effect
+                bombSprite.setColor(sf::Color::Black); 
 
             window.draw(bombSprite);
         }
@@ -314,7 +314,7 @@ void Game::render(sf::RenderWindow& window) {
         const SuperFruit& sfruit = objects.getSuperFruit();
         if (sfruit.active) {
             float pulseTime = gameClock.getElapsedTime().asSeconds();
-            float scale = 1.0f + 0.2f * sin(pulseTime * 8); // pulse 8x per second
+            float scale = 1.0f + 0.2f * sin(pulseTime * 8); 
 
             superFruitSprite.setScale(scale, scale);
 
@@ -350,7 +350,7 @@ void Game::render(sf::RenderWindow& window) {
     case SETTINGS_MENU: 
     {
         bgSprite.setTexture(bgMenu);
-        bgSprite.setColor(sf::Color(255, 255, 255, 150)); // Add transparency
+        bgSprite.setColor(sf::Color(255, 255, 255, 150)); 
         sf::Vector2u winSize = window.getSize();
         bgSprite.setScale(
             float(winSize.x) / bgMenu.getSize().x,
@@ -364,7 +364,7 @@ void Game::render(sf::RenderWindow& window) {
     case SETTINGS_RESOLUTION:
     {
         bgSprite.setTexture(bgMenu);
-        bgSprite.setColor(sf::Color(255, 255, 255, 150)); // Transparent overlay
+        bgSprite.setColor(sf::Color(255, 255, 255, 150)); 
         winSize = window.getSize();
         bgSprite.setScale(
             float(winSize.x) / bgMenu.getSize().x,
@@ -377,7 +377,7 @@ void Game::render(sf::RenderWindow& window) {
     case SETTINGS_SOUND:
     {
         bgSprite.setTexture(bgMenu);
-        bgSprite.setColor(sf::Color(255, 255, 255, 150)); // Transparent overlay
+        bgSprite.setColor(sf::Color(255, 255, 255, 150)); 
         winSize = window.getSize();
         bgSprite.setScale(
             float(winSize.x) / bgMenu.getSize().x,
@@ -524,7 +524,7 @@ void Game::handleInput(sf::RenderWindow& window) {
             }
             else if (isMouseOver(ui->menuButton.shape, mousePos)) {
                 soundButton.play();
-                saveSession();  // Save before going to menu
+                saveSession(); 
                 state = MENU_WITH_SAVED;
             }
         }
@@ -541,7 +541,7 @@ void Game::handleInput(sf::RenderWindow& window) {
                     window.close();
                 }
                 else if (confirmationType == CONFIRM_RESIZE) {
-                    setting.resolution = pendingResolution;     // store resolution to apply
+                    setting.resolution = pendingResolution;     
                     setting.volume = ui->volumeLevel;
                     setting.saveToFile();
 
@@ -617,7 +617,7 @@ void Game::handleInput(sf::RenderWindow& window) {
                 soundButton.play();
                 setting.volume = ui->volumeLevel;
 
-                setting.saveToFile();  // Save settings (volume) only
+                setting.saveToFile();  
 
                 state = SETTINGS_MENU;
             }
@@ -640,7 +640,7 @@ void Game::applyResolutionChange(sf::RenderWindow& window) {
     sf::VideoMode mode = setting.getVideoMode();
     sf::Uint32 style = setting.getWindowStyle();
 
-    saveSession();  // Save before changing resolution
+    saveSession(); 
 
     window.create(mode, "Snake Game", style);
     window.setFramerateLimit(60);
@@ -650,7 +650,7 @@ void Game::applyResolutionChange(sf::RenderWindow& window) {
     ui = new UI(font, mode.width, mode.height);
     ui->resize(mode.width, mode.height);
 
-    ui->syncVolumeSlider(setting.volume);  // Keep knob and label synced
+    ui->syncVolumeSlider(setting.volume);  
 
     // Update grid size and inform systems that depend on it
     gridSize = getPlayAreaSize(window.getSize());
