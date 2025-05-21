@@ -8,7 +8,7 @@
 // Constants for tile/grid and timing logic
 // --------------------------------------------------
 
-// Grid unit size (tile) — still static
+// Grid unit size (tile) â€” still static
 const int TILE_SIZE = 16;
 
 // Top bar height (fixed pixels)
@@ -71,4 +71,4 @@ const std::string SAVE_FILE_PATH = "Save files/save.dat";
 const std::string SETTINGS_FILE_PATH = "Save files/saved_setting.dat";
 
 
-#endif // CONFIG_H
+#endif 
