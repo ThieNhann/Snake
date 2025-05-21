@@ -256,6 +256,15 @@ void Game::render(sf::RenderWindow& window) {
         ui->drawMenu(window, gsm->hasSavedSession());  
         break;
     case MODE_SELECTION:
+        // Draw background like settings
+        bgSprite.setTexture(bgMenu);
+        bgSprite.setColor(sf::Color(255, 255, 255, 150));
+        winSize = window.getSize();
+        bgSprite.setScale(
+            float(winSize.x) / bgMenu.getSize().x,
+            float(winSize.y) / bgMenu.getSize().y
+        );
+        window.draw(bgSprite);
         ui->drawModeSelection(window);
         break;
     case PAUSED:

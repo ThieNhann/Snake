@@ -10,7 +10,7 @@ int main() {
 
     setting.loadFromFile();
 
-    sf::RenderWindow window(setting.getVideoMode(), "Snake Game", setting.getWindowStyle());
+    sf::RenderWindow window(setting.getVideoMode(), "Snake", setting.getWindowStyle());
     window.setFramerateLimit(60);
 
     GameStateManager gsm;
