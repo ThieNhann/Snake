@@ -80,7 +80,7 @@ private:
     bool hasSavedSession = false;
     bool skipNextBombUpdate = false;
 
-    ConfirmationType confirmationType;  // What we're confirming
+    ConfirmationType confirmationType;  
     sf::RectangleShape confirmBox;
     sf::Text confirmText, yesText, noText;
     sf::RectangleShape yesButton, noButton;
