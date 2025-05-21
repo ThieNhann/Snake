@@ -355,18 +355,18 @@ void UI::updateHoverEffect(const sf::Vector2f& mousePos) {
 
     // --- Pause button hover effect ---
     if (pauseCircle.getGlobalBounds().contains(mousePos)) {
-        pauseCircle.setFillColor(sf::Color(160, 160, 90));  // Hover color
+        pauseCircle.setFillColor(sf::Color(160, 160, 90));  
     }
     else {
-        pauseCircle.setFillColor(sf::Color(200, 200, 120)); // Default color
+        pauseCircle.setFillColor(sf::Color(200, 200, 120)); 
     }
 
     // --- Volume knob hover effect ---
     if (volumeKnob.getGlobalBounds().contains(mousePos)) {
-        volumeKnob.setFillColor(sf::Color(200, 200, 200)); // Hover color
+        volumeKnob.setFillColor(sf::Color(200, 200, 200)); 
     }
     else if (!draggingVolume) {
-        volumeKnob.setFillColor(sf::Color(160, 160, 160)); // Default
+        volumeKnob.setFillColor(sf::Color(160, 160, 160)); 
     }
 }
 
@@ -382,5 +382,5 @@ void UI::syncVolumeSlider(int volume) {
     volumeLabel.setString(std::to_string(volume) + "%");
     sf::FloatRect bounds = volumeLabel.getLocalBounds();
     volumeLabel.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-    volumeLabel.setPosition(width / 2.f - 55.f, volumeTrack.getPosition().y + 30.f);  // Adjust Y as needed
+    volumeLabel.setPosition(width / 2.f - 55.f, volumeTrack.getPosition().y + 30.f);  
 }
