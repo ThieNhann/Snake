@@ -22,4 +22,4 @@ bool isMouseOver(const sf::RectangleShape& button, const sf::Vector2f& mousePos)
 // Utility: Center a text object horizontally and place at a specific Y
 void centerText(sf::Text& text, float windowWidth, float yPos);
 
-#endif // UTILS_H
+#endif 
