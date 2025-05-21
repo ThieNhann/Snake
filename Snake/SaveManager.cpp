@@ -142,7 +142,7 @@ void SaveManager::saveHighScoreAndSettingsOnly(const std::string& filename, int 
     out.write(reinterpret_cast<const char*>(&highScore), sizeof(highScore));
 
     int zero = 0;
-    out.write(reinterpret_cast<const char*>(&zero), sizeof(zero));  // Snake size = 0
+    out.write(reinterpret_cast<const char*>(&zero), sizeof(zero));  
 
     Fruit dummyFruit = { -1, -1 };
     int dummyScore = 0;
