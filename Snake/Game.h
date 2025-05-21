@@ -8,21 +8,14 @@
 #include "ObjectManager.h"
 #include "UI.h"
 #include "Settings.h"
-
-enum GameState { MENU, MENU_WITH_SAVED, PLAYING, PAUSED, GAME_OVER, CONFIRMATION, 
-                 SETTINGS_MENU, SETTINGS_RESOLUTION, SETTINGS_SOUND, MODE_SELECTION };
-enum ConfirmationType { CONFIRM_EXIT, CONFIRM_NEW_GAME, CONFIRM_RESIZE };
-
-enum GameMode { NORMAL_MODE, FIRE_BORDER_MODE };
+#include "GameStateManager.h"
 
 class Game {
 public:
-    Game(sf::Vector2u windowSize);
+    Game(sf::Vector2u windowSize, GameStateManager* gsm);
     void reset();
     void update(float dt);
     void render(sf::RenderWindow& window);
-    GameState getState() const;
-    void setState(GameState newState);
 
     // ----------------------
     // --- Input handling ---
@@ -53,7 +46,6 @@ private:
     sf::Texture snakeTex, fruitTex, bombTex, superFruitTex, bgMenu, bgOver;
     sf::Sprite snakeSprite, fruitSprite, bombSprite, superFruitSprite, bgSprite;
 
-    GameState state ;
     sf::Clock gameClock;
     float delay;
     float timer = 0;
@@ -77,10 +69,8 @@ private:
     sf::Sound soundExplode;
     sf::Sound soundSuperEat;
 
-    bool hasSavedSession = false;
     bool skipNextBombUpdate = false;
 
-    ConfirmationType confirmationType;  
     sf::RectangleShape confirmBox;
     sf::Text confirmText, yesText, noText;
     sf::RectangleShape yesButton, noButton;
@@ -102,7 +92,7 @@ private:
     void saveSession();
     void loadSession();
 
-    GameMode mode = NORMAL_MODE;
+    GameStateManager* gsm = nullptr;
 };
 
-#endif 
+#endif

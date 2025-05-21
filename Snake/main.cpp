@@ -3,6 +3,7 @@
 #include "Config.h"
 #include "Settings.h"
 #include "UI.h"
+#include "GameStateManager.h"
 #include <fstream>
 
 int main() {
@@ -12,7 +13,8 @@ int main() {
     sf::RenderWindow window(setting.getVideoMode(), "Snake Game", setting.getWindowStyle());
     window.setFramerateLimit(60);
 
-    Game game(window.getSize());
+    GameStateManager gsm;
+    Game game(window.getSize(), &gsm);
 
     while (window.isOpen()) {
         sf::Event e;
@@ -22,7 +24,7 @@ int main() {
         }
 
         game.handleInput(window);
-        float dt = game.getState() == PLAYING ? 1.f / 60.f : 0.f;
+        float dt = gsm.getState() == PLAYING ? 1.f / 60.f : 0.f;
         game.update(dt);
 
         window.clear();

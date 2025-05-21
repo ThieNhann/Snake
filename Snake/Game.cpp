@@ -7,6 +7,7 @@
 #include "Config.h"
 #include "Utils.h"
 #include "SaveManager.h"
+#include "GameStateManager.h"
 
 #include <iostream>
 #include <fstream>
@@ -14,10 +15,11 @@
 
 sf::Clock buttonTimer;  
 
-Game::Game(sf::Vector2u windowSize)
+Game::Game(sf::Vector2u windowSize, GameStateManager* gsm_)
     : gridSize(getPlayAreaSize(windowSize)),
     snake(gridSize.x, gridSize.y),
-    objects(gridSize.x, gridSize.y) {
+    objects(gridSize.x, gridSize.y),
+    gsm(gsm_) {
     srand(static_cast<unsigned>(time(nullptr)));
     loadAssets();
 
@@ -34,7 +36,7 @@ Game::Game(sf::Vector2u windowSize)
     eatSound.setVolume(setting.volume);
     ui->syncVolumeSlider(setting.volume);
 
-    state = MENU;
+    gsm->setState(MENU);
 }
 
 void Game::loadAssets() {
@@ -103,14 +105,14 @@ void Game::reset() {
     delay = INITIAL_DELAY;
     timer = 0;
     objects.spawnFruit(snake);
-    snake.setWrappingEnabled(mode == NORMAL_MODE);
+    snake.setWrappingEnabled(gsm->getMode() == NORMAL_MODE);
     gameClock.restart();
     buttonTimer.restart();
-    state = PLAYING;
+    gsm->setState(PLAYING);
 }
 
 void Game::update(float dt) {
-    if (state != PLAYING) return;
+    if (gsm->getState() != PLAYING) return;
 
     // Always update super fruit timer
     objects.updateSuperFruit(dt, score, snake);
@@ -126,7 +128,7 @@ void Game::update(float dt) {
         dyingTimer -= dt;
         if (dyingTimer <= 0.f) {
             isDying = false;
-            state = GAME_OVER;
+            gsm->setState(GAME_OVER);
         }
         return; 
     }
@@ -144,6 +146,7 @@ void Game::update(float dt) {
 
             isDying = true;
             dyingTimer = 2.f;
+            gsm->setState(GAME_OVER);
             return;
         }
 
@@ -155,6 +158,7 @@ void Game::update(float dt) {
 
             isDying = true;
             dyingTimer = 2.f; 
+            gsm->setState(GAME_OVER);
             return;
         }
 
@@ -172,6 +176,7 @@ void Game::update(float dt) {
 
             isDying = true;
             dyingTimer = 2.f;
+            gsm->setState(GAME_OVER);
             return;
         }
 
@@ -189,7 +194,7 @@ void Game::update(float dt) {
 
 void Game::render(sf::RenderWindow& window) {
     // --- Set background based on game state ---
-    if (state == MENU) {
+    if (gsm->getState() == MENU) {
         bgSprite.setTexture(bgMenu);
         bgSprite.setColor(sf::Color::White);  
         sf::Vector2u winSize = window.getSize();
@@ -199,7 +204,7 @@ void Game::render(sf::RenderWindow& window) {
         );
         window.draw(bgSprite);
     }
-    else if (state == GAME_OVER) {
+    else if (gsm->getState() == GAME_OVER) {
         bgSprite.setTexture(bgOver);
         sf::Vector2u winSize = window.getSize();
         bgSprite.setScale(
@@ -209,7 +214,7 @@ void Game::render(sf::RenderWindow& window) {
         window.draw(bgSprite);
     }
 
-    else if (state == PLAYING) {
+    else if (gsm->getState() == PLAYING) {
         window.clear(RetroGreen); 
 
         sf::Vector2u winSize = window.getSize(); 
@@ -223,16 +228,16 @@ void Game::render(sf::RenderWindow& window) {
         border.setPosition(left + 8.5f, top + 5.0f);              
         border.setOutlineThickness(5.f);
         border.setOrigin(2.5f, 2.5f);
-        border.setOutlineColor(mode == FIRE_BORDER_MODE ? sf::Color::Red : sf::Color::Black);
+        border.setOutlineColor(gsm->getMode() == FIRE_BORDER_MODE ? sf::Color::Red : sf::Color::Black);
         border.setFillColor(sf::Color::Transparent);
         window.draw(border);
 
     }
-    else if (state == PAUSED)
+    else if (gsm->getState() == PAUSED)
     {
         window.clear(RetroGreen); 
     }
-    else if (state == MENU_WITH_SAVED) {
+    else if (gsm->getState() == MENU_WITH_SAVED) {
         bgSprite.setTexture(bgMenu);
         bgSprite.setColor(sf::Color::White);  
         sf::Vector2u winSize = window.getSize();
@@ -245,10 +250,10 @@ void Game::render(sf::RenderWindow& window) {
 
     // --- Draw UI and objects depending on state ---
     sf::Vector2u winSize = window.getSize();
-    switch (state) {
+    switch (gsm->getState()) {
     case MENU:
     case MENU_WITH_SAVED:
-        ui->drawMenu(window, hasSavedSession);  
+        ui->drawMenu(window, gsm->hasSavedSession());  
         break;
     case MODE_SELECTION:
         ui->drawModeSelection(window);
@@ -391,7 +396,7 @@ void Game::render(sf::RenderWindow& window) {
 }
 
 void Game::handleInput(sf::RenderWindow& window) {
-    if (state == PLAYING) {
+    if (gsm->getState() == PLAYING) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) snake.setDirection(1);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) snake.setDirection(2);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) snake.setDirection(3);
@@ -435,42 +440,42 @@ void Game::handleInput(sf::RenderWindow& window) {
 
     // --- Button Behavior ---
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && canClick()) {
-        if (state == MENU || state == MENU_WITH_SAVED) {
+        if (gsm->getState() == MENU || gsm->getState() == MENU_WITH_SAVED) {
             if (isMouseOver(ui->startButton.shape, mousePos)) {
                 soundButton.play();
-                if (hasSavedSession) {
-                    confirmationType = CONFIRM_NEW_GAME;
+                if (gsm->hasSavedSession()) {
+                    gsm->setConfirmationType(CONFIRM_NEW_GAME);
                     ui->confirmText.setString("Start a new game?\nYour current session will be lost.");
-                    state = CONFIRMATION;
+                    gsm->setState(CONFIRMATION);
                 }
                 else {
                     // Ensure grid is recomputed
                     gridSize = getPlayAreaSize(window.getSize());
                     snake.setGridSize(gridSize.x, gridSize.y);
                     objects.setGridSize(gridSize.x, gridSize.y);
-                    state = MODE_SELECTION;
+                    gsm->setState(MODE_SELECTION);
                 }
             }
-            else if (isMouseOver(ui->continueButton.shape, mousePos) && hasSavedSession) {
+            else if (isMouseOver(ui->continueButton.shape, mousePos) && gsm->hasSavedSession()) {
                 soundButton.play();
                 loadSession();
             }
             else if (isMouseOver(ui->exitButton.shape, mousePos)) {
                 soundButton.play();
-                confirmationType = CONFIRM_EXIT;
+                gsm->setConfirmationType(CONFIRM_EXIT);
                 ui->confirmText.setString("Are you sure you want to quit?");
-                state = CONFIRMATION;
+                gsm->setState(CONFIRMATION);
             }
             else if (isMouseOver(ui->settingsButton.shape, mousePos)) {
                 soundButton.play();
-                state = SETTINGS_MENU;
+                gsm->setState(SETTINGS_MENU);
             }
         }
 
-        else if (state == MODE_SELECTION) {
+        else if (gsm->getState() == MODE_SELECTION) {
             if (isMouseOver(ui->normalModeButton.shape, mousePos)) {
                 soundButton.play();
-                mode = NORMAL_MODE;
+                gsm->setMode(NORMAL_MODE);
                 snake.setWrappingEnabled(true);
                 gridSize = getPlayAreaSize(window.getSize());
                 snake.setGridSize(gridSize.x, gridSize.y);
@@ -479,7 +484,7 @@ void Game::handleInput(sf::RenderWindow& window) {
             }
             else if (isMouseOver(ui->fireBorderModeButton.shape, mousePos)) {
                 soundButton.play();
-                mode = FIRE_BORDER_MODE;
+                gsm->setMode(FIRE_BORDER_MODE);
                 snake.setWrappingEnabled(false);
                 gridSize = getPlayAreaSize(window.getSize());
                 snake.setGridSize(gridSize.x, gridSize.y);
@@ -488,14 +493,14 @@ void Game::handleInput(sf::RenderWindow& window) {
             }
             else if (isMouseOver(ui->backButton.shape, mousePos)) {
                 soundButton.play();
-                state = MENU;
+                gsm->setState(MENU);
             }
         }
 
-        else if (state == GAME_OVER) {
+        else if (gsm->getState() == GAME_OVER) {
             if (isMouseOver(ui->restartButton.shape, mousePos)) {
                 soundButton.play();
-                state = MODE_SELECTION;
+                gsm->setState(MODE_SELECTION);
             }
             else if (isMouseOver(ui->exitButton.shape, mousePos)) {
                 soundButton.play();
@@ -505,42 +510,42 @@ void Game::handleInput(sf::RenderWindow& window) {
                     highScore = score;
                 }
 
-                confirmationType = CONFIRM_EXIT;
+                gsm->setConfirmationType(CONFIRM_EXIT);
                 saveHighScoreAndSettingsOnly();
                 ui->confirmText.setString("Are you sure you want to quit?");
-                state = CONFIRMATION;
+                gsm->setState(CONFIRMATION);
             }
         }
 
-        else if (state == PLAYING && ui->pauseCircle.getGlobalBounds().contains(mousePos)) {
+        else if (gsm->getState() == PLAYING && ui->pauseCircle.getGlobalBounds().contains(mousePos)) {
             soundButton.play();
-            state = PAUSED;
+            gsm->setState(PAUSED);
         }
 
-        else if (state == PAUSED) {
+        else if (gsm->getState() == PAUSED) {
             if (isMouseOver(ui->resumeButton.shape, mousePos)) {
                 soundButton.play();
-                state = PLAYING;
+                gsm->setState(PLAYING);
             }
             else if (isMouseOver(ui->menuButton.shape, mousePos)) {
                 soundButton.play();
                 saveSession(); 
-                state = MENU_WITH_SAVED;
+                gsm->setState(MENU_WITH_SAVED);
             }
         }
 
-        else if (state == CONFIRMATION) {
+        else if (gsm->getState() == CONFIRMATION) {
             if (isMouseOver(ui->yesButton.shape, mousePos)) {
-                if (confirmationType == CONFIRM_NEW_GAME) {
+                if (gsm->getConfirmationType() == CONFIRM_NEW_GAME) {
                     soundButton.play();
-                    hasSavedSession = false;
-                    state = MODE_SELECTION;
+                    gsm->setHasSavedSession(false);
+                    gsm->setState(MODE_SELECTION);
                 }
-                else if (confirmationType == CONFIRM_EXIT) {
+                else if (gsm->getConfirmationType() == CONFIRM_EXIT) {
                     soundButton.play();
                     window.close();
                 }
-                else if (confirmationType == CONFIRM_RESIZE) {
+                else if (gsm->getConfirmationType() == CONFIRM_RESIZE) {
                     setting.resolution = pendingResolution;     
                     setting.volume = ui->volumeLevel;
                     setting.saveToFile();
@@ -548,54 +553,54 @@ void Game::handleInput(sf::RenderWindow& window) {
                     applyResolutionChange(window);
                     ui->resize(window.getSize().x, window.getSize().y);
 
-                    hasSavedSession = false;
-                    state = SETTINGS_RESOLUTION;
+                    gsm->setHasSavedSession(false);
+                    gsm->setState(SETTINGS_RESOLUTION);
                 }
             }
             else if (isMouseOver(ui->noButton.shape, mousePos)) {
                 soundButton.play();
-                state = hasSavedSession ? MENU_WITH_SAVED : MENU;
+                gsm->setState(gsm->hasSavedSession() ? MENU_WITH_SAVED : MENU);
             }
         }
 
-        else if (state == SETTINGS_MENU) {
+        else if (gsm->getState() == SETTINGS_MENU) {
             if (isMouseOver(ui->resolutionButton.shape, mousePos)) {
                 soundButton.play();
-                state = SETTINGS_RESOLUTION;
+                gsm->setState(SETTINGS_RESOLUTION);
             }
             else if (isMouseOver(ui->soundButton.shape, mousePos)) {
                 soundButton.play();
-                state = SETTINGS_SOUND;
+                gsm->setState(SETTINGS_SOUND);
             }
             else if (isMouseOver(ui->backButton.shape, mousePos)) {
                 soundButton.play();
-                state = MENU;
+                gsm->setState(MENU);
             }
         }
-        else if (state == SETTINGS_RESOLUTION) {
+        else if (gsm->getState() == SETTINGS_RESOLUTION) {
             if (setting.resolution != RES_800x600 && isMouseOver(ui->res800Button.shape, mousePos)) {
                 soundButton.play();
                 pendingResolution = RES_800x600;
-                confirmationType = CONFIRM_RESIZE;
+                gsm->setConfirmationType(CONFIRM_RESIZE);
                 ui->confirmText.setCharacterSize(14);
                 ui->confirmText.setString("Changing field size will delete \nyour current session. \nContinue?");
-                state = CONFIRMATION;
+                gsm->setState(CONFIRMATION);
             }
 
             else if (setting.resolution != RES_1600x900 && isMouseOver(ui->res1600Button.shape, mousePos)) {
                 soundButton.play();
                 pendingResolution = RES_1600x900;
-                confirmationType = CONFIRM_RESIZE;
+                gsm->setConfirmationType(CONFIRM_RESIZE);
                 ui->confirmText.setString("Changing field size will delete \nyour current session. \nContinue?");
-                state = CONFIRMATION;
+                gsm->setState(CONFIRMATION);
             }
 
             else if (setting.resolution != RES_FULLSCREEN && isMouseOver(ui->fullscreenButton.shape, mousePos)) {
                 soundButton.play();
                 pendingResolution = RES_FULLSCREEN;
-                confirmationType = CONFIRM_RESIZE;
+                gsm->setConfirmationType(CONFIRM_RESIZE);
                 ui->confirmText.setString("Changing field size will delete \nyour current session. \nContinue?");
-                state = CONFIRMATION;
+                gsm->setState(CONFIRMATION);
             }
 
             else if (
@@ -609,31 +614,22 @@ void Game::handleInput(sf::RenderWindow& window) {
 
             else if (isMouseOver(ui->backButton.shape, mousePos)) {
                 soundButton.play();
-                state = SETTINGS_MENU;
+                gsm->setState(SETTINGS_MENU);
             }
         }
-        else if (state == SETTINGS_SOUND) {
+        else if (gsm->getState() == SETTINGS_SOUND) {
             if (!ui->draggingVolume && isMouseOver(ui->backButton.shape, mousePos)) {
                 soundButton.play();
                 setting.volume = ui->volumeLevel;
 
                 setting.saveToFile();  
 
-                state = SETTINGS_MENU;
+                gsm->setState(SETTINGS_MENU);
             }
         }
 
         buttonTimer.restart();
     }
-}
-
-GameState Game::getState() const {
-    return state;
-}
-
-void Game::setState(GameState newState) {
-    // Update game state
-    state = newState;
 }
 
 void Game::applyResolutionChange(sf::RenderWindow& window) {
@@ -668,7 +664,7 @@ void Game::saveSession() {
     savedNextSuperFruitScore = objects.getNextSuperFruitScore();
     savedScore = score;
     savedDelay = delay;
-    hasSavedSession = true;
+    gsm->setHasSavedSession(true);
     saveSessionToFile();  
 }
 
@@ -704,7 +700,7 @@ void Game::loadSession() {
     skipNextBombUpdate = true;
 
     gameClock.restart();
-    state = PLAYING;
+    gsm->setState(PLAYING);
 }
 
 void Game::saveSessionToFile() {
@@ -720,12 +716,12 @@ void Game::saveSessionToFile() {
         savedScore, 
         savedDelay, 
         savedDirection,
-        static_cast<int>(mode));
+        static_cast<int>(gsm->getMode()));
 }
 
 void Game::loadSessionFromFile() {
     if (!SaveManager::validate(SAVE_FILE_PATH)) {
-        hasSavedSession = false;
+        gsm->setHasSavedSession(false);
         return;
     }
 
@@ -752,17 +748,17 @@ void Game::loadSessionFromFile() {
         savedNextBombToggleScore = bombToggleScore;
         savedSuperFruit = loadedSuper;
         savedNextSuperFruitScore = superScore;
-        mode = static_cast<GameMode>(modeInt);
-        snake.setWrappingEnabled(mode == NORMAL_MODE);
-        hasSavedSession = true;
+        gsm->setMode(static_cast<GameMode>(modeInt));
+        snake.setWrappingEnabled(gsm->getMode() == NORMAL_MODE);
+        gsm->setHasSavedSession(true);
     }
     else {
-        hasSavedSession = false;
+        gsm->setHasSavedSession(false);
     }
 }
 
 void Game::saveHighScoreAndSettingsOnly() {
     SaveManager::saveHighScoreAndSettingsOnly(SAVE_FILE_PATH, highScore);
-    hasSavedSession = false;
+    gsm->setHasSavedSession(false);
 }
 
