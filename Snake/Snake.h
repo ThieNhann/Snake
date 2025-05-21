@@ -34,10 +34,10 @@ public:
 
 private:
     std::vector<SnakeSegment> body;
-    int direction = 0;      // 0=Down, 1=Left, 2=Right, 3=Up
+    int direction = 0;     
     int prevDirection = 0;
     bool wrappingEnabled = true;
     int gridW, gridH;
 };
 
-#endif // SNAKE_H
+#endif 
