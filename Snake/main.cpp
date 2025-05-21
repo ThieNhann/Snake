@@ -7,10 +7,8 @@
 
 int main() {
 
-    // Load settings (volume, resolution)
     setting.loadFromFile();
 
-    // Create window using loaded settings
     sf::RenderWindow window(setting.getVideoMode(), "Snake Game", setting.getWindowStyle());
     window.setFramerateLimit(60);
 
