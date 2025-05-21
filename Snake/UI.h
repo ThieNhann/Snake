@@ -32,7 +32,7 @@ public:
     void drawGameOver(sf::RenderWindow& window, int score, int highScore);
     void drawHUD(sf::RenderWindow& window, int score, int highScore);
     void drawConfirmation(sf::RenderWindow& window);
-    void drawSettingsRoot(sf::RenderWindow& window);     // for "Resolution", "Sound", "Back"
+    void drawSettingsRoot(sf::RenderWindow& window);     
     void drawResolutionMenu(sf::RenderWindow& window);
     void drawSoundSettings(sf::RenderWindow& window);
 
@@ -69,7 +69,7 @@ public:
 
     sf::RectangleShape volumeTrack;
     sf::CircleShape volumeKnob;
-    int volumeLevel = 50; // default 50%
+    int volumeLevel = 50; 
     bool draggingVolume = false;
     sf::Text volumeLabel;
     void syncVolumeSlider(int volume);
@@ -85,4 +85,4 @@ private:
     void centerButton(UIButton& button, const std::string& text, float topY, sf::Color color, unsigned size = 15);
 };
 
-#endif // UI_H
+#endif 
