@@ -7,7 +7,6 @@ void GameSettings::save(std::ofstream& out) {
     int r = static_cast<int>(resolution);
     out.write(reinterpret_cast<char*>(&r), sizeof(r));
 
-    // Manual clamp (equivalent to std::clamp)
     int clampedVolume = volume;
     if (clampedVolume < 0) clampedVolume = 0;
     if (clampedVolume > 100) clampedVolume = 100;
@@ -22,7 +21,7 @@ void GameSettings::load(std::ifstream& in) {
 
     if (in.peek() != EOF) {
         in.read(reinterpret_cast<char*>(&volume), sizeof(volume));
-        // 🛡️ Clamp to range just in case
+       
         if (volume < 0 || volume > 100) volume = 100;
     }
     else {
