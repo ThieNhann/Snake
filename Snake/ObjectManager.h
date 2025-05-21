@@ -22,7 +22,7 @@ struct Bomb {
 struct SuperFruit {
     int x, y;
     bool active;
-    float timer;  // Time remaining until it disappears
+    float timer;  
 };
 
 class ObjectManager {
@@ -72,5 +72,5 @@ private:
     void spawnBomb(const Snake& snake);
 };
 
-#endif // OBJECTMANAGER_H
+#endif 
 
