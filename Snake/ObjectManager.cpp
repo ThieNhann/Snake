@@ -20,10 +20,10 @@ void ObjectManager::reset() {
 
     bomb = { -1, -1, false };
     bombVisible = false;
-    nextBombToggleScore = 3 + rand() % 3; // [3..5]
+    nextBombToggleScore = 3 + rand() % 3; 
 
     superFruit = { -1, -1, false, 0.f };
-    nextSuperFruitScore = 7 + rand() % 4; // [7..10]
+    nextSuperFruitScore = 7 + rand() % 4; 
 }
 
 void ObjectManager::setGridSize(int gridWidth, int gridHeight) {
@@ -72,7 +72,6 @@ void ObjectManager::updateBomb(int score, const Snake& snake) {
             bombVisible = false;
         }
 
-        // Set next toggle point [3..5] points later
         nextBombToggleScore = score + 3 + rand() % 3;
     }
 }
@@ -121,14 +120,14 @@ void ObjectManager::spawnSuperFruit(const Snake& snake) {
             (superFruit.x != bomb.x || superFruit.y != bomb.y);
     } while (!valid);
     superFruit.active = true;
-    superFruit.timer = 5.f;   // vanish after 5 secs
+    superFruit.timer = 5.f;   
 }
 
 void ObjectManager::updateSuperFruit(float dt, int score, const Snake& snake) {
     if (!superFruit.active && score >= nextSuperFruitScore) {
         spawnSuperFruit(snake);
-        const int baseDelay = 7 + rand() % 4;  // 7–10
-        const int offsetForSuperValue = 5;    // adjust to fix the amount of point bonus push in
+        const int baseDelay = 7 + rand() % 4;  
+        const int offsetForSuperValue = 5;   
         nextSuperFruitScore = score + baseDelay + offsetForSuperValue;
     }
 
@@ -145,7 +144,7 @@ bool ObjectManager::checkSuperFruitCollision(const Snake& snake) {
         snake.getBody()[0].x == superFruit.x &&
         snake.getBody()[0].y == superFruit.y)
     {
-        superFruit = { -1, -1, false, 0.f };  // Immediately remove
+        superFruit = { -1, -1, false, 0.f };  
         return true;
     }
     return false;
