@@ -99,7 +99,8 @@ void Game::reset() {
     objects.setGridSize(gridSize.x, gridSize.y);
 
     objects.reset();
-
+    isDying = false;
+    dyingTimer = 0.f;
     snake.reset();
     score = 0;
     delay = INITIAL_DELAY;
