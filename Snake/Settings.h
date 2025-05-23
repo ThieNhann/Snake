@@ -18,6 +18,7 @@ public:
     ResolutionOption resolution = RES_800x600;
    
     int volume = 100;  
+    int snakeSpeed = 2; // 1: Slow, 2: Normal, 3: Fast
 
     void save(std::ofstream& out);
     void load(std::ifstream& in);
@@ -30,4 +31,4 @@ public:
 
 extern GameSettings setting;
 
-#endif 
+#endif

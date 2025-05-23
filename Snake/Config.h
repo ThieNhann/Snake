@@ -19,7 +19,7 @@ const int PLAY_AREA_MARGIN = 50;
 
 // Game speed and logic
 const float INITIAL_DELAY = 0.2f;
-const float SPEED_INCREMENT = 0.9f;
+const float SPEED_INCREMENT = 0.925f;
 const int SPEED_SCORE_THRESHOLD = 3;
 
 // Button input cooldown time

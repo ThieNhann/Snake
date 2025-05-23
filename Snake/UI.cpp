@@ -32,6 +32,7 @@ void UI::layoutPauseMenu(float startY, float h, float spacing) {
 void UI::layoutSettingsRoot(float startY, float h, float spacing) {
     centerButton(resolutionButton, "Field Size", startY, sf::Color(120, 120, 180));
     centerButton(soundButton, "Sound", startY + h + spacing, sf::Color(120, 120, 180));
+    centerButton(speedButton, "Snake Speed", startY + 2 * (h + spacing), sf::Color(120, 120, 180));
 }
 
 void UI::layoutResolutionOptions(float startY, float h, float spacing) {
@@ -133,6 +134,12 @@ void UI::layoutConfirmationBox(float buttonHeight) {
     noButton.label.setPosition(noButton.shape.getPosition().x + btnWidth / 2.f, btnY + buttonHeight / 2.f);
 }
 
+void UI::layoutSpeedSettings(float startY, float buttonHeight, float spacing) {
+    centerButton(speedSlowButton, "Slow", startY, sf::Color(120, 180, 120));
+    centerButton(speedNormalButton, "Normal", startY + buttonHeight + spacing, sf::Color(120, 120, 180));
+    centerButton(speedFastButton, "Fast", startY + 2 * (buttonHeight + spacing), sf::Color(180, 120, 120));
+}
+
 void UI::resize(float w, float h) {
     width = w;
     height = h;
@@ -162,6 +169,7 @@ void UI::resize(float w, float h) {
     layoutVolumeControls(200.f);
     layoutPauseIcon();
     layoutConfirmationBox(buttonHeight);
+    layoutSpeedSettings(height / 2.f - 80.f, buttonHeight, spacing);
 }
 
 void UI::centerButton(UIButton& button, const std::string& text, float topY, sf::Color color, unsigned size) {
@@ -290,6 +298,7 @@ void UI::drawSettingsRoot(sf::RenderWindow& window) {
     window.draw(settingsTitle);
     window.draw(resolutionButton.shape); window.draw(resolutionButton.label);
     window.draw(soundButton.shape); window.draw(soundButton.label);
+    window.draw(speedButton.shape); window.draw(speedButton.label);
     window.draw(backButton.shape); window.draw(backButton.label);
 }
 
@@ -324,6 +333,19 @@ void UI::drawSoundSettings(sf::RenderWindow& window) {
     window.draw(backButton.label);
 }
 
+void UI::drawSpeedSettings(sf::RenderWindow& window) {
+    settingsTitle.setString("Snake Speed");
+    sf::FloatRect titleBounds = settingsTitle.getLocalBounds();
+    settingsTitle.setOrigin(titleBounds.left + titleBounds.width / 2.f, titleBounds.top + titleBounds.height / 2.f);
+    settingsTitle.setPosition(width / 2.f, 50.f);
+    window.draw(settingsTitle);
+
+    window.draw(speedSlowButton.shape); window.draw(speedSlowButton.label);
+    window.draw(speedNormalButton.shape); window.draw(speedNormalButton.label);
+    window.draw(speedFastButton.shape); window.draw(speedFastButton.label);
+    window.draw(backButton.shape); window.draw(backButton.label);
+}
+
 void UI::applyHoverEffect(UIButton* btn, const sf::Vector2f& mousePos) {
     bool hovered = btn->shape.getGlobalBounds().contains(mousePos);
 
@@ -345,7 +367,8 @@ void UI::updateHoverEffect(const sf::Vector2f& mousePos) {
         &startButton, &resumeButton, &menuButton, &restartButton,
         &exitButton, &continueButton, &yesButton, &noButton,
         &settingsButton, &res800Button, &res1600Button, &fullscreenButton,
-        &backButton, &resolutionButton, &soundButton, &normalModeButton, &fireBorderModeButton
+        &backButton, &resolutionButton, &soundButton, &normalModeButton, &fireBorderModeButton,
+        &speedButton, &speedSlowButton, &speedNormalButton, &speedFastButton
     };
 
     for (UIButton* btn : buttons) {

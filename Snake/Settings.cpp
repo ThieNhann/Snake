@@ -12,6 +12,7 @@ void GameSettings::save(std::ofstream& out) {
     if (clampedVolume > 100) clampedVolume = 100;
 
     out.write(reinterpret_cast<char*>(&clampedVolume), sizeof(clampedVolume));
+    out.write(reinterpret_cast<char*>(&snakeSpeed), sizeof(snakeSpeed));
 }
 
 void GameSettings::load(std::ifstream& in) {
@@ -26,6 +27,13 @@ void GameSettings::load(std::ifstream& in) {
     }
     else {
         volume = 100;
+    }
+
+    if (in.peek() != EOF) {
+        in.read(reinterpret_cast<char*>(&snakeSpeed), sizeof(snakeSpeed));
+        if (snakeSpeed < 1 || snakeSpeed > 3) snakeSpeed = 2;
+    } else {
+        snakeSpeed = 2;
     }
 }
 

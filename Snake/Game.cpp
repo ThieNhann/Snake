@@ -104,6 +104,12 @@ void Game::reset() {
     snake.reset();
     score = 0;
     delay = INITIAL_DELAY;
+    switch (setting.snakeSpeed) {
+        case 1: delay = INITIAL_DELAY * 1.5f; break; // Slow
+        case 2: delay = INITIAL_DELAY; break;        // Normal
+        case 3: delay = INITIAL_DELAY * 0.6f; break; // Fast
+        default: delay = INITIAL_DELAY; break;
+    }
     timer = 0;
     objects.spawnFruit(snake);
     snake.setWrappingEnabled(gsm->getMode() == NORMAL_MODE);
@@ -402,6 +408,19 @@ void Game::render(sf::RenderWindow& window) {
         ui->drawSoundSettings(window);  
         break;
     }
+    case SETTINGS_SPEED:
+    {
+        bgSprite.setTexture(bgMenu);
+        bgSprite.setColor(sf::Color(255, 255, 255, 150)); 
+        sf::Vector2u winSize = window.getSize();
+        bgSprite.setScale(
+            float(winSize.x) / bgMenu.getSize().x,
+            float(winSize.y) / bgMenu.getSize().y
+        );
+        window.draw(bgSprite);
+        ui->drawSpeedSettings(window);
+        break;
+    }
     }
 }
 
@@ -582,6 +601,10 @@ void Game::handleInput(sf::RenderWindow& window) {
                 soundButton.play();
                 gsm->setState(SETTINGS_SOUND);
             }
+            else if (isMouseOver(ui->speedButton.shape, mousePos)) {
+                soundButton.play();
+                gsm->setState(SETTINGS_SPEED);
+            }
             else if (isMouseOver(ui->backButton.shape, mousePos)) {
                 soundButton.play();
                 gsm->setState(MENU);
@@ -634,6 +657,30 @@ void Game::handleInput(sf::RenderWindow& window) {
 
                 setting.saveToFile();  
 
+                gsm->setState(SETTINGS_MENU);
+            }
+        }
+        else if (gsm->getState() == SETTINGS_SPEED) {
+            if (isMouseOver(ui->speedSlowButton.shape, mousePos)) {
+                soundButton.play();
+                setting.snakeSpeed = 1;
+                setting.saveToFile();
+                gsm->setState(MENU); // chuyển về menu
+            }
+            else if (isMouseOver(ui->speedNormalButton.shape, mousePos)) {
+                soundButton.play();
+                setting.snakeSpeed = 2;
+                setting.saveToFile();
+                gsm->setState(MENU); // chuyển về menu
+            }
+            else if (isMouseOver(ui->speedFastButton.shape, mousePos)) {
+                soundButton.play();
+                setting.snakeSpeed = 3;
+                setting.saveToFile();
+                gsm->setState(MENU); // chuyển về menu
+            }
+            else if (isMouseOver(ui->backButton.shape, mousePos)) {
+                soundButton.play();
                 gsm->setState(SETTINGS_MENU);
             }
         }

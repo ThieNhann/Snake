@@ -24,6 +24,7 @@ public:
     void layoutConfirmationBox(float buttonHeight);
     void layoutVolumeControls(float sliderWidth);
     void layoutPauseIcon();
+    void layoutSpeedSettings(float startY, float buttonHeight, float spacing);
 
     // --- Draw UI ---
     void drawMenu(sf::RenderWindow& window, bool showContinue);
@@ -35,6 +36,7 @@ public:
     void drawSettingsRoot(sf::RenderWindow& window);     
     void drawResolutionMenu(sf::RenderWindow& window);
     void drawSoundSettings(sf::RenderWindow& window);
+    void drawSpeedSettings(sf::RenderWindow& window);
 
     // --- Hover effect ---
     void applyHoverEffect(UIButton* btn, const sf::Vector2f& mousePos);
@@ -67,6 +69,11 @@ public:
     UIButton normalModeButton;
     UIButton fireBorderModeButton;
 
+    UIButton speedButton;
+    UIButton speedSlowButton;
+    UIButton speedNormalButton;
+    UIButton speedFastButton;
+
     sf::RectangleShape volumeTrack;
     sf::CircleShape volumeKnob;
     int volumeLevel = 50; 
@@ -85,4 +92,4 @@ private:
     void centerButton(UIButton& button, const std::string& text, float topY, sf::Color color, unsigned size = 15);
 };
 
-#endif 
+#endif
