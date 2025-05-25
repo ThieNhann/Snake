@@ -171,6 +171,7 @@ void Game::update(float dt) {
 
         // --- Check super fruit ---
         if (objects.checkSuperFruitCollision(snake)) {
+            snake.grow();
             score += 5;
             soundSuperEat.play();
         }

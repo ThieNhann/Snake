@@ -19,6 +19,9 @@ const int PLAY_AREA_MARGIN = 50;
 
 // Game speed and logic
 const float INITIAL_DELAY = 0.2f;
+const float SLOW_DELAY = INITIAL_DELAY * 1.5f;
+const float NORMAL_DELAY = INITIAL_DELAY;
+const float FAST_DELAY = INITIAL_DELAY * 0.6f;
 const float SPEED_INCREMENT = 0.925f;
 const int SPEED_SCORE_THRESHOLD = 3;
 
