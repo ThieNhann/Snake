@@ -3,11 +3,35 @@
 #ifndef GAMESTATEMANAGER_H
 #define GAMESTATEMANAGER_H
 
-enum GameState { MENU, MENU_WITH_SAVED, PLAYING, PAUSED, GAME_OVER, CONFIRMATION, 
-                 SETTINGS_MENU, SETTINGS_RESOLUTION, SETTINGS_SOUND, SETTINGS_SPEED, MODE_SELECTION };
-enum ConfirmationType { CONFIRM_EXIT, CONFIRM_NEW_GAME, CONFIRM_RESIZE };
-enum GameMode { NORMAL_MODE, FIRE_BORDER_MODE };
+// All possible game states
+enum GameState {
+    MENU,
+    MENU_WITH_SAVED,
+    PLAYING,
+    PAUSED,
+    GAME_OVER,
+    CONFIRMATION,
+    SETTINGS_MENU,
+    SETTINGS_RESOLUTION,
+    SETTINGS_SOUND,
+    SETTINGS_SPEED,
+    MODE_SELECTION
+};
 
+// Types of confirmation dialogs
+enum ConfirmationType {
+    CONFIRM_EXIT,
+    CONFIRM_NEW_GAME,
+    CONFIRM_RESIZE
+};
+
+// Supported game modes
+enum GameMode {
+    NORMAL_MODE,
+    FIRE_BORDER_MODE
+};
+
+// Manages the current game state, mode, and confirmation dialogs
 class GameStateManager {
 public:
     GameStateManager() : state(MENU), confirmationType(CONFIRM_EXIT), hasSaved(false), mode(NORMAL_MODE) {}

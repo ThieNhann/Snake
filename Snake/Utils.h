@@ -10,16 +10,16 @@
 #include <SFML/Graphics.hpp>
 #include <sstream>
 
-// Forward declaration of cooldown clock
+// Global cooldown timer for button clicks
 extern sf::Clock buttonTimer;
 
-// Utility: Check if a button can be clicked based on cooldown
+// Returns true if enough time has passed since the last button click
 bool canClick();
 
-// Utility: Check if mouse is over a button
+// Returns true if the mouse is over the given button shape
 bool isMouseOver(const sf::RectangleShape& button, const sf::Vector2f& mousePos);
 
-// Utility: Center a text object horizontally and place at a specific Y
+// Centers a text object horizontally at a given y position
 void centerText(sf::Text& text, float windowWidth, float yPos);
 
-#endif 
+#endif

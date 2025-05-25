@@ -15,9 +15,13 @@
 
 namespace fs = std::filesystem;
 
+// Handles saving and loading game sessions and high scores
 class SaveManager {
 public:
+    // Validates the save file format and content
     static bool validate(const std::string& filename);
+
+    // Saves the full game session to file
     static void saveSessionToFile(
         const std::string& filename,
         int highScore,
@@ -32,6 +36,8 @@ public:
         int direction,
         int mode
     );
+
+    // Loads the full game session from file
     static bool loadSessionFromFile(
         const std::string& filename,
         int& highScore,
@@ -46,6 +52,8 @@ public:
         int& direction,
         int& mode
     );
+
+    // Saves only the high score and settings to file
     static void saveHighScoreAndSettingsOnly(const std::string& filename, int highScore);
 };
 

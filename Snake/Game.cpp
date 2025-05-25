@@ -315,12 +315,11 @@ void Game::render(sf::RenderWindow& window) {
 
         // --- Draw Bomb ---
         const Bomb& bomb = objects.getBomb();
-        if (bomb.active) {
+        if (bomb.isActive()) {
             bombSprite.setPosition(
-                bomb.x * TILE_SIZE + pixelOffset.x,
-                bomb.y * TILE_SIZE + pixelOffset.y
+                bomb.getX() * TILE_SIZE + pixelOffset.x,
+                bomb.getY() * TILE_SIZE + pixelOffset.y
             );
-
             // Flicker every 0.5 seconds
             float flicker = fmod(gameClock.getElapsedTime().asSeconds(), 1.0f);
             if (flicker < 0.5f)
@@ -333,22 +332,22 @@ void Game::render(sf::RenderWindow& window) {
 
         // --- Draw super fruit ---
         const SuperFruit& sfruit = objects.getSuperFruit();
-        if (sfruit.active) {
+        if (sfruit.isActive()) {
             float pulseTime = gameClock.getElapsedTime().asSeconds();
             float scale = 1.0f + 0.2f * sin(pulseTime * 8); 
 
             superFruitSprite.setScale(scale, scale);
 
             superFruitSprite.setPosition(
-                sfruit.x * TILE_SIZE + pixelOffset.x,
-                sfruit.y * TILE_SIZE + pixelOffset.y
+                sfruit.getX() * TILE_SIZE + pixelOffset.x,
+                sfruit.getY() * TILE_SIZE + pixelOffset.y
             );
 
             // Adjust origin to center pulse 
             superFruitSprite.setOrigin(8, 8);
             superFruitSprite.setPosition(
-                sfruit.x * TILE_SIZE + pixelOffset.x + 8,
-                sfruit.y * TILE_SIZE + pixelOffset.y + 8
+                sfruit.getX() * TILE_SIZE + pixelOffset.x + 8,
+                sfruit.getY() * TILE_SIZE + pixelOffset.y + 8
             );
 
             window.draw(superFruitSprite);
@@ -357,8 +356,8 @@ void Game::render(sf::RenderWindow& window) {
         // --- Draw fruit ---
         const Fruit& fruit = objects.getFruit();
         fruitSprite.setPosition(
-            fruit.x * TILE_SIZE + pixelOffset.x,
-            fruit.y * TILE_SIZE + pixelOffset.y);
+            fruit.getX() * TILE_SIZE + pixelOffset.x,
+            fruit.getY() * TILE_SIZE + pixelOffset.y);
         window.draw(fruitSprite);
 
         break;
@@ -748,8 +747,8 @@ void Game::loadSession() {
 
     // Check if fruit is still in bounds
     sf::Vector2i offset = getPlayAreaOffset();
-    if (savedFruit.x < offset.x || savedFruit.x >= offset.x + gridSize.x ||
-        savedFruit.y < offset.y || savedFruit.y >= offset.y + gridSize.y)
+    if (savedFruit.getX() < offset.x || savedFruit.getX() >= offset.x + gridSize.x ||
+        savedFruit.getY() < offset.y || savedFruit.getY() >= offset.y + gridSize.y)
     {
         objects.spawnFruit(snake);
     }

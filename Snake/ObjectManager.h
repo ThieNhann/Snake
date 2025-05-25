@@ -10,36 +10,66 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
 
-struct Fruit {
+// Fruit object class
+class Fruit {
+public:
+    Fruit() : x(-1), y(-1) {}
+    Fruit(int x, int y) : x(x), y(y) {}
+    void setPosition(int nx, int ny) { x = nx; y = ny; }
+    int getX() const { return x; }
+    int getY() const { return y; }
+private:
     int x, y;
 };
 
-struct Bomb {
+// Bomb object class
+class Bomb {
+public:
+    Bomb() : x(-1), y(-1), active(false) {}
+    Bomb(int x, int y, bool active) : x(x), y(y), active(active) {}
+    void setPosition(int nx, int ny) { x = nx; y = ny; }
+    void setActive(bool a) { active = a; }
+    int getX() const { return x; }
+    int getY() const { return y; }
+    bool isActive() const { return active; }
+private:
     int x, y;
     bool active;
 };
 
-struct SuperFruit {
+// SuperFruit object class
+class SuperFruit {
+public:
+    SuperFruit() : x(-1), y(-1), active(false), timer(0.f) {}
+    SuperFruit(int x, int y, bool active, float timer) : x(x), y(y), active(active), timer(timer) {}
+    void setPosition(int nx, int ny) { x = nx; y = ny; }
+    void setActive(bool a) { active = a; }
+    void setTimer(float t) { timer = t; }
+    int getX() const { return x; }
+    int getY() const { return y; }
+    bool isActive() const { return active; }
+    float getTimer() const { return timer; }
+private:
     int x, y;
     bool active;
-    float timer;  
+    float timer;
 };
 
+// Manages all game objects (fruit, bomb, super fruit)
 class ObjectManager {
 public:
     ObjectManager(int gridWidth, int gridHeight);
 
-    // Grid setup
     void setGridSize(int gridWidth, int gridHeight);
     void reset();
 
-    // --- Fruit ---
+    // Fruit management
     void spawnFruit(const Snake& snake);
     bool checkFruitCollision(const Snake& snake);
     const Fruit& getFruit() const;
     void load(const Fruit& f);
 
-    // --- Bomb ---
+    // Bomb management
     void updateBomb(int score, const Snake& snake);
     bool checkBombCollision(const Snake& snake);
     const Bomb& getBomb() const;
@@ -47,7 +77,7 @@ public:
     int getNextBombToggleScore() const;
     void setNextBombToggleScore(int score);
 
-    // --- Super Fruit ---
+    // Super fruit management
     void spawnSuperFruit(const Snake& snake);
     void updateSuperFruit(float dt, int score, const Snake& snake);
     bool checkSuperFruitCollision(const Snake& snake);
@@ -72,5 +102,5 @@ private:
     void spawnBomb(const Snake& snake);
 };
 
-#endif 
+#endif
 

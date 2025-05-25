@@ -7,7 +7,7 @@
 #include <cstdlib>
 
 // ----------------------
-//  Miscs implementation
+//  Misc implementation
 // ----------------------
 
 ObjectManager::ObjectManager(int gridWidth, int gridHeight)
@@ -16,13 +16,13 @@ ObjectManager::ObjectManager(int gridWidth, int gridHeight)
 }
 
 void ObjectManager::reset() {
-    fruit = { -1, -1 };
+    fruit = Fruit();
 
-    bomb = { -1, -1, false };
+    bomb = Bomb();
     bombVisible = false;
     nextBombToggleScore = 3 + rand() % 3; 
 
-    superFruit = { -1, -1, false, 0.f };
+    superFruit = SuperFruit();
     nextSuperFruitScore = 7 + rand() % 4; 
 }
 
@@ -37,15 +37,17 @@ void ObjectManager::setGridSize(int gridWidth, int gridHeight) {
 
 void ObjectManager::spawnFruit(const Snake& snake) {
     bool valid = false;
+    int fx, fy;
     do {
-        fruit.x = rand() % gridW;
-        fruit.y = rand() % gridH;
-        valid = !snake.isAt(fruit.x, fruit.y);
+        fx = rand() % gridW;
+        fy = rand() % gridH;
+        valid = !snake.isAt(fx, fy);
     } while (!valid);
+    fruit.setPosition(fx, fy);
 }
 
 bool ObjectManager::checkFruitCollision(const Snake& snake) {
-    return snake.getBody()[0].x == fruit.x && snake.getBody()[0].y == fruit.y;
+    return snake.getBody()[0].x == fruit.getX() && snake.getBody()[0].y == fruit.getY();
 }
 
 const Fruit& ObjectManager::getFruit() const {
@@ -64,11 +66,11 @@ void ObjectManager::updateBomb(int score, const Snake& snake) {
     if (score >= nextBombToggleScore) {
         if (!bombVisible) {
             spawnBomb(snake);
-            bomb.active = true;
+            bomb.setActive(true);
             bombVisible = true;
         }
         else {
-            bomb = { -1, -1, false };
+            bomb = Bomb();
             bombVisible = false;
         }
 
@@ -78,15 +80,17 @@ void ObjectManager::updateBomb(int score, const Snake& snake) {
 
 void ObjectManager::spawnBomb(const Snake& snake) {
     bool valid = false;
+    int bx, by;
     do {
-        bomb.x = rand() % gridW;
-        bomb.y = rand() % gridH;
-        valid = !snake.isAt(bomb.x, bomb.y) && (bomb.x != fruit.x || bomb.y != fruit.y);
+        bx = rand() % gridW;
+        by = rand() % gridH;
+        valid = !snake.isAt(bx, by) && (bx != fruit.getX() || by != fruit.getY());
     } while (!valid);
+    bomb.setPosition(bx, by);
 }
 
 bool ObjectManager::checkBombCollision(const Snake& snake) {
-    return bomb.active && snake.getBody()[0].x == bomb.x && snake.getBody()[0].y == bomb.y;
+    return bomb.isActive() && snake.getBody()[0].x == bomb.getX() && snake.getBody()[0].y == bomb.getY();
 }
 
 const Bomb& ObjectManager::getBomb() const {
@@ -95,7 +99,7 @@ const Bomb& ObjectManager::getBomb() const {
 
 void ObjectManager::loadBomb(const Bomb& b) {
     bomb = b;
-    bombVisible = b.active;
+    bombVisible = b.isActive();
 }
 
 int ObjectManager::getNextBombToggleScore() const {
@@ -112,39 +116,41 @@ void ObjectManager::setNextBombToggleScore(int score) {
 
 void ObjectManager::spawnSuperFruit(const Snake& snake) {
     bool valid = false;
+    int sx, sy;
     do {
-        superFruit.x = rand() % gridW;
-        superFruit.y = rand() % gridH;
-        valid = !snake.isAt(superFruit.x, superFruit.y) &&
-            (superFruit.x != fruit.x || superFruit.y != fruit.y) &&
-            (superFruit.x != bomb.x || superFruit.y != bomb.y);
+        sx = rand() % gridW;
+        sy = rand() % gridH;
+        valid = !snake.isAt(sx, sy) &&
+            (sx != fruit.getX() || sy != fruit.getY()) &&
+            (sx != bomb.getX() || sy != bomb.getY());
     } while (!valid);
-    superFruit.active = true;
-    superFruit.timer = 5.f;   
+    superFruit.setPosition(sx, sy);
+    superFruit.setActive(true);
+    superFruit.setTimer(5.f);
 }
 
 void ObjectManager::updateSuperFruit(float dt, int score, const Snake& snake) {
-    if (!superFruit.active && score >= nextSuperFruitScore) {
+    if (!superFruit.isActive() && score >= nextSuperFruitScore) {
         spawnSuperFruit(snake);
         const int baseDelay = 7 + rand() % 4;  
         const int offsetForSuperValue = 5;   
         nextSuperFruitScore = score + baseDelay + offsetForSuperValue;
     }
 
-    if (superFruit.active) {
-        superFruit.timer -= dt;
-        if (superFruit.timer <= 0.f) {
-            superFruit = { -1, -1, false, 0.f };
+    if (superFruit.isActive()) {
+        superFruit.setTimer(superFruit.getTimer() - dt);
+        if (superFruit.getTimer() <= 0.f) {
+            superFruit = SuperFruit();
         }
     }
 }
 
 bool ObjectManager::checkSuperFruitCollision(const Snake& snake) {
-    if (superFruit.active &&
-        snake.getBody()[0].x == superFruit.x &&
-        snake.getBody()[0].y == superFruit.y)
+    if (superFruit.isActive() &&
+        snake.getBody()[0].x == superFruit.getX() &&
+        snake.getBody()[0].y == superFruit.getY())
     {
-        superFruit = { -1, -1, false, 0.f };  
+        superFruit = SuperFruit();
         return true;
     }
     return false;
