@@ -105,9 +105,9 @@ void Game::reset() {
     score = 0;
     delay = INITIAL_DELAY;
     switch (setting.snakeSpeed) {
-        case 1: delay = INITIAL_DELAY * 1.5f; break; // Slow
-        case 2: delay = INITIAL_DELAY; break;        // Normal
-        case 3: delay = INITIAL_DELAY * 0.6f; break; // Fast
+        case 1: delay = SLOW_DELAY * 1.5f; break;
+        case 2: delay = NORMAL_DELAY; break;
+        case 3: delay = FAST_DELAY * 0.6f; break;
         default: delay = INITIAL_DELAY; break;
     }
     timer = 0;
