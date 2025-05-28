@@ -124,7 +124,7 @@
 - [coding_convention](https://studenthcmusedu-my.sharepoint.com/:t:/g/personal/23120064_student_hcmus_edu_vn/EZ50s31JiBxJvcZ-5Tf6_r4BfEcvtKcYi-7UYWMwpxS_6g?e=H3eFTs)
 - [Demo](https://youtu.be/hlZZ63k_C3s)
 - [Software_Architecture](https://studenthcmusedu-my.sharepoint.com/:t:/g/personal/23120064_student_hcmus_edu_vn/ES-XdWo-wmJHltEqITrLoPkBCKBwncY23CvA8FOIGeu6Uw?e=gikSAI)
-
+- [DoxygenHTML](https://studenthcmusedu-my.sharepoint.com/:f:/g/personal/23120064_student_hcmus_edu_vn/ErvKIjeXoEdFr98r0zo3mWcBhTdl2yNxYZ5wGB30i4oaQA?e=zp4AuD)
 ---
 
 
