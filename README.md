@@ -34,7 +34,7 @@
 
 ###
 - [Commit GitHub](https://github.com/ThieNhann/Snake/commits/main/)
-- [GitLog](https://studenthcmusedu-my.sharepoint.com/:f:/g/personal/23120064_student_hcmus_edu_vn/Ei3VfumFN3JGm2Byd26J_YgBBVx_q8UWndRi93V6aIp8Zw?e=sFZUmg)
+- [git_logs](https://studenthcmusedu-my.sharepoint.com/:f:/g/personal/23120064_student_hcmus_edu_vn/Ei3VfumFN3JGm2Byd26J_YgBBVx_q8UWndRi93V6aIp8Zw?e=sFZUmg)
 - Theo dõi tiến độ và thảo luận hầu hết đều ở nhóm chat Zalo.
 ---
 
@@ -122,7 +122,7 @@
 ## 6. Tài liệu & Demo
 - [Repo GitHub](https://github.com/ThieNhann/Snake)
 - [coding_convention](https://studenthcmusedu-my.sharepoint.com/:t:/g/personal/23120064_student_hcmus_edu_vn/EZ50s31JiBxJvcZ-5Tf6_r4BfEcvtKcYi-7UYWMwpxS_6g?e=H3eFTs)
-- [Demo](https://youtu.be/OtVR6b829zA)
+- [Demo](https://youtu.be/hlZZ63k_C3s)
 - [Software_Architecture](https://studenthcmusedu-my.sharepoint.com/:t:/g/personal/23120064_student_hcmus_edu_vn/ES-XdWo-wmJHltEqITrLoPkBCKBwncY23CvA8FOIGeu6Uw?e=gikSAI)
 
 ---
