@@ -1,99 +1,130 @@
 # Đồ án: Hướng Đối Tượng Hóa Trò Chơi Rắn Săn Mồi
 
-##  Nhóm thực hiện
+## Nhóm thực hiện
 
 | Họ tên               | MSSV      | Vai trò      |
-|----------------------|-----------|---------------|
-| Nguyễn Thiện Nhân    | 23120064  | Nhóm trưởng   |
-| Hà Quốc Kiên         | 23120056  | Thành viên    |
-| Nguyễn Thanh Khánh Hà| 23120037  | Thành viên    |
-
+|----------------------|-----------|--------------|
+| Nguyễn Thiện Nhân    | 23120064  | Nhóm trưởng  |
+| Hà Quốc Kiên         | 23120056  | Thành viên   |
+| Nguyễn Thanh Khánh Hà| 23120037  | Thành viên   |
 
 ---
+
 ## Phân chia công việc
-### Nguyễn Thiện Nhân - 23120064		(30%)
-- Thiết kế sơ bộ các class và class diagram
-- Thiết kế lớp `Snake` để quản lý thân rắn và các thuộc tính liên quan.
-- Cài đặt logic điều khiển di chuyển từ bàn phím.
-- Xử lý va chạm.
+### Nguyễn Thiện Nhân - 23120064 (35%)
+- Thiết kế sơ bộ các class, class diagram tổng thể, xác định kiến trúc OOP và các pattern sử dụng.
+- Thiết kế và cài đặt lớp `Snake` (quản lý thân rắn, di chuyển, va chạm, logic điều khiển từ bàn phím).
+- Tham gia xây dựng `GameStateManager` (quản lý trạng thái game).
+- Tham gia xây dựng logic lưu/khôi phục session, high score.
+- Viết tài liệu kiến trúc phần mềm, hướng dẫn sử dụng, báo cáo.
 
-### Hà Quốc Kiên - 23120056 		(40%)
-- Thiết kế lớp `Fruit`  (bên trong Object Manager) để quản lý vị trí và trạng thái của thức ăn.
-- Cài đặt logic sinh ngẫu nhiên vị trí mới cho thức ăn sau khi bị ăn.
-- Quản lý điểm số và giao diện hiển thị điểm cho người chơi.
+### Hà Quốc Kiên - 23120056 (35%)
+- Thiết kế và cài đặt các lớp `Fruit`, `Bomb`, `SuperFruit` (trong ObjectManager).
+- Xây dựng toàn bộ logic spawn, collision, quản lý điểm số, hiệu ứng động cho object.
+- Xây dựng và hoàn thiện `ObjectManager` quản lý các đối tượng động.
+- Tham gia xây dựng UI (hiển thị điểm số, hiệu ứng, layout).
+- Tham gia kiểm thử, tối ưu code, đóng góp ý tưởng UI/UX.
 
-### Nguyễn Thanh Khánh Hà - 23120037		(30%)
-- Thiết kế lớp `Game` làm lớp điều phối chính, xử lý vòng lặp trò chơi và cập nhật trạng thái liên tục.
-- Xử lý logic kết thúc trò chơi khi có va chạm hoặc các điều kiện thua.
-- Tích hợp các lớp `Snake`, `Food` và quản lý toàn bộ luồng hoạt động của game.
+### Nguyễn Thanh Khánh Hà - 23120037 (30%)
+- Thiết kế và cài đặt lớp `Game` (điều phối chính, vòng lặp game, cập nhật trạng thái, render).
+- Tích hợp các module: Snake, ObjectManager, UI, Settings, SaveManager.
+- Xử lý logic kết thúc game, pause, resume, chuyển đổi trạng thái, xác nhận (confirmation).
+- Xây dựng và hoàn thiện các chức năng settings (âm lượng, tốc độ, độ phân giải).
+- Tham gia kiểm thử, đóng góp tài liệu, hướng dẫn sử dụng.
 
+###
+- [Commit GitHub](https://github.com/ThieNhann/Snake/commits/main/)
+- [GitLog](https://studenthcmusedu-my.sharepoint.com/:f:/g/personal/23120064_student_hcmus_edu_vn/Ei3VfumFN3JGm2Byd26J_YgBBVx_q8UWndRi93V6aIp8Zw?e=sFZUmg)
+- Theo dõi tiến độ và thảo luận hầu hết đều ở nhóm chat Zalo.
 ---
 
 ## Đề xuất tỉ lệ điểm chia đều.
 
-## Mô tả.
-
-### 1. **Teamwork**
-
-Họp ngày 28-04-2025: [bien_ban_hop_28_04](https://studenthcmusedu-my.sharepoint.com/:b:/g/personal/23120064_student_hcmus_edu_vn/EVVYrUSPU2tHtAqOAUfjMlYBV7mIAG0wskN9A1JZii524Q?e=rDHNL6).
-[git log](https://studenthcmusedu-my.sharepoint.com/:i:/g/personal/23120064_student_hcmus_edu_vn/Eb5yDNz-Si5Iv6vKgEifw0gBWdoN3fld0sbwLKQbNxU4DA?e=mFL29f)
-### 2. **UI/UX**
-
--   Cài đặt lại chức năng của mã nguồn mẫu theo hướng đối tượng: **Hoàn thành**
--   Các chức năng thêm và cải tiến: **Chưa hoàn thành tất cả**
--   Giao diện bố trí hợp lí: **Ổn**
 ---
 
+## 1. Tổng quan & Mục tiêu
 
-## 3. Kiến trúc phần mềm + design pattern
-#### Kiến trúc Model - View - Controller (có sửa đổi)
--   **Model**: 
-    -   Lớp `Snake`, `Fruit`, `GameObjects`, `Settings` là phần mô hình dữ liệu và logic trò chơi.
-    -   Lưu trữ trạng thái game (score, snake body, fruit position, v.v...).
--   **View**:
-    -   Lớp `UI` chịu trách nhiệm hiển thị UI tương ứng với từng trạng thái `GameState`.
-    -   Các sprite và background được load và render tương ứng với từng trạng thái.
--   **Controller (Game)**:
-    -   Lớp `Game` điều phối luồng hoạt động: input → xử lý → render.
-    -   Điều phối trạng thái (`GameState`), xử lý input, lưu/khôi phục session...
-
-#### Encapsulation
-
--   Các thành phần như `Snake`, `Fruit`, `Settings`, `UI` là các lớp riêng biệt.
--   Dữ liệu được ẩn và chỉ truy cập thông qua các phương thức (`snake.getBody()`, `setting.save()`, ...).
-    
-
-####  Abstraction
--   Các lớp được thiết kế để giấu chi tiết cụ thể bên trong (như cách `UI` vẽ nút, hoặc `snake.move()` hoạt động ra sao không cần biết trong `Game`).
-
-#### Single Responsibility Principle
-
--   Mỗi lớp đảm nhiệm một vai trò riêng:
-    -   `Game`: điều phối trạng thái, logic chính.
-    -   `UI`: vẽ giao diện người dùng.
-    -   `Settings`: quản lý cấu hình.
-    -   `Snake`, `Fruit`: logic thực thể game.
-        
-
-####  Open/Closed Principle
--   Code mở rộng được nhưng hạn chế chỉnh sửa.  
-    Ví dụ: thêm state `SETTINGS_SOUND` hoặc `SETTINGS_RESOLUTION` chỉ cần thêm enum, 1 case render, không thay đổi logic cũ.
-
-
-#### State Pattern:  Quản lý trạng thái game (MENU,  PLAYING,  PAUSED, v.v.). 
-#### Singleton:  Quản lý cài đặt toàn cục (`Settings`).
-#### Observer:  Theo dõi và cập nhật trạng thái UI (điểm số, trạng thái game).
-
-## Đảm bảo chất lượng
-
-[coding_convention](https://studenthcmusedu-my.sharepoint.com/:t:/g/personal/23120064_student_hcmus_edu_vn/EZ50s31JiBxJvcZ-5Tf6_r4BfEcvtKcYi-7UYWMwpxS_6g?e=H3eFTs)
+Đồ án hoàn thiện trò chơi Snake với kiến trúc hướng đối tượng (OOP), tách biệt rõ ràng các module, áp dụng các nguyên lý SOLID, design pattern phổ biến (MVC, State, Singleton, Observer).
 
 ---
 
-## Tài liệu mô tả kiến trúc phần mềm và các module:
-[Kien_Truc_Phan_Mem](https://studenthcmusedu-my.sharepoint.com/:t:/g/personal/23120064_student_hcmus_edu_vn/EfWT-Dt0K7dAkRIenLFUwZABEELvhgX0nWebudY-ucgRmg?e=9dwham)
+## 2. Kiến trúc phần mềm & OOP Design
 
-## Demo:
-[Demo](https://youtu.be/OtVR6b829zA)
+### 2.1. Tổng quan kiến trúc
+
+- **Model - View - Controller (MVC)**
+    - **Model**: `Snake`, `Fruit`, `Bomb`, `SuperFruit`, `Settings`, `ObjectManager`
+    - **View**: `UI` (vẽ giao diện, nút, HUD, hiệu ứng)
+    - **Controller**: `Game` (điều phối trạng thái, xử lý input, vòng lặp game)
+
+- **State Pattern**: Quản lý trạng thái game (`GameStateManager`), chuyển đổi giữa MENU, PLAYING, PAUSED, GAME_OVER, SETTINGS, CONFIRMATION, v.v.
+
+- **Singleton**: Lớp `Settings` (biến toàn cục `setting`) đảm bảo cấu hình nhất quán toàn chương trình.
+
+- **Observer**: UI cập nhật theo trạng thái game, điểm số, high score, v.v.
+
+### 2.2. OOP Principles & SOLID
+
+- **Encapsulation**: 
+    - Dữ liệu và logic của từng thực thể (Snake, Fruit, Bomb, SuperFruit) được đóng gói trong class riêng, chỉ truy cập qua public method.
+    - Ví dụ: `Snake::move()`, `ObjectManager::spawnFruit()`, `Settings::saveToFile()`.
+
+- **Abstraction**:
+    - Ẩn chi tiết cài đặt, chỉ cung cấp interface cần thiết. Ví dụ: `UI` chỉ cung cấp các hàm vẽ, không lộ chi tiết layout.
+    - `ObjectManager` quản lý logic spawn/collision mà không lộ chi tiết ra ngoài.
+
+- **Single Responsibility Principle**:
+    - Mỗi class chỉ đảm nhiệm một vai trò:
+        - `Snake`: quản lý thân rắn, di chuyển, va chạm
+        - `ObjectManager`: quản lý các đối tượng động (fruit, bomb, superfruit)
+        - `UI`: vẽ giao diện, hiệu ứng, layout
+        - `Game`: điều phối trạng thái, vòng lặp, input, lưu/khôi phục session
+        - `Settings`: quản lý cấu hình, lưu/đọc file
+        - `SaveManager`: quản lý lưu/đọc session
+
+- **Open/Closed Principle**:
+    - Dễ dàng mở rộng thêm trạng thái, chức năng mới (ví dụ: thêm mode, thêm object, thêm menu settings) mà không sửa code cũ.
+    - Ví dụ: Thêm `SETTINGS_SPEED` chỉ cần thêm enum, 1 case render, không ảnh hưởng logic cũ.
+
+
+- **Dependency Inversion**:
+    - Các module cấp cao (Game) không phụ thuộc trực tiếp vào chi tiết module cấp thấp (UI, ObjectManager), mà thông qua interface rõ ràng.
+
+---
+
+## 3. Design Pattern thực hiện
+
+- **MVC**: Tách biệt rõ Model (logic/game data), View (UI), Controller (Game).
+- **State Pattern**: `GameStateManager` quản lý trạng thái, chuyển đổi linh hoạt.
+- **Singleton**: `Settings` (biến setting toàn cục).
+- **Observer**: UI cập nhật theo trạng thái, điểm số, high score.
+- **Factory (simple)**: `ObjectManager` sinh các object động (fruit, bomb, superfruit) theo điều kiện.
+
+---
+
+## 4. Chức năng & UI/UX
+
+- Giao diện rõ ràng, responsive, tự động scale theo độ phân giải.
+- Menu, pause, game over, settings, confirmation box, hiệu ứng hover, slider âm lượng, chọn tốc độ rắn, chọn kích thước màn chơi.
+- Lưu/khôi phục session, high score, settings.
+- Hiệu ứng động: flicker, pulse, hover, v.v.
+
+---
+
+## 5. Đảm bảo chất lượng
+
+- Code tuân thủ coding convention, tách file rõ ràng, dễ bảo trì.
+- Đã kiểm thử các case: chơi mới, pause, resume, game over, đổi resolution, đổi tốc độ, lưu/khôi phục session, v.v.
+- Dễ mở rộng thêm mode, object, UI, logic mới.
+
+---
+
+## 6. Tài liệu & Demo
+- [Repo GitHub](https://github.com/ThieNhann/Snake)
+- [coding_convention](https://studenthcmusedu-my.sharepoint.com/:t:/g/personal/23120064_student_hcmus_edu_vn/EZ50s31JiBxJvcZ-5Tf6_r4BfEcvtKcYi-7UYWMwpxS_6g?e=H3eFTs)
+- [Demo](https://youtu.be/OtVR6b829zA)
+- [Software_Architecture](https://studenthcmusedu-my.sharepoint.com/:t:/g/personal/23120064_student_hcmus_edu_vn/ES-XdWo-wmJHltEqITrLoPkBCKBwncY23CvA8FOIGeu6Uw?e=gikSAI)
+
+---
 
 
